@@ -1,5 +1,5 @@
 build:
-  image: docker
+  image: proxy-docker.sourdin.ovh/docker
   stage: build
   when: always
   script:
