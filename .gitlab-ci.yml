@@ -3,12 +3,11 @@ stages:
 
 variables:
   DOCKER_DRIVER: overlay2
-  REGISTRY: "repo-pub-docker.sourdin.ovh"
 
 services:
   - docker:dind
 
-build:
+buildprivate:
   image: proxy-docker.sourdin.ovh/docker
   stage: build
   when: always
@@ -17,5 +16,17 @@ build:
     - docker build -t $REGISTRY/devops/s3toolkit:$CI_COMMIT_TAG .
     - docker push $REGISTRY/devops/s3toolkit:$CI_COMMIT_TAG
     - docker logout $REGISTRY
+  rules:
+    - if: $CI_COMMIT_TAG
+
+buildpublic:
+  image: proxy-docker.sourdin.ovh/docker
+  stage: build
+  when: always
+  script:
+    - docker login repo-pub-docker.sourdin.ovh -u $REGISTRY_USER -p $REGISTRY_PASSWORD
+    - docker build -t repo-pub-docker.sourdin.ovh/devops/s3toolkit:$CI_COMMIT_TAG .
+    - docker push repo-pub-docker.sourdin.ovh/devops/s3toolkit:$CI_COMMIT_TAG
+    - docker logout repo-pub-docker.sourdin.ovh
   rules:
     - if: $CI_COMMIT_TAG
