@@ -1,4 +1,5 @@
 FROM proxy-docker.sourdin.ovh/alpine:3.17.0
+ENV TERRAFORM_VERSION 1.3.6
 RUN  apk update && apk upgrade && apk --no-cache add python3 py3-pip groff ca-certificates gnupg tzdata less mailcap openssl \
     && wget -q -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.25.4/bin/linux/amd64/kubectl \
     && wget -q -O gomplate https://github.com/hairyhenderson/gomplate/releases/download/v3.11.3/gomplate_linux-amd64-slim \
